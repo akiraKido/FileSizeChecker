@@ -170,3 +170,4 @@ __pycache__/
 *.xsd.cs
 FileSizeChecker/bin/
 FileSizeChecker/obj/
+.vs/
