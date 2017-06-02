@@ -168,3 +168,5 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+FileSizeChecker/bin/
+FileSizeChecker/obj/
