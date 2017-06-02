@@ -1,0 +1,11 @@
+C:\Users\ichi-dohi\Documents\Visual Studio 2015\Projects\FileSizeChecker\FileSizeChecker\bin\Debug\FileSizeChecker.exe.config
+C:\Users\ichi-dohi\Documents\Visual Studio 2015\Projects\FileSizeChecker\FileSizeChecker\bin\Debug\FileSizeChecker.exe
+C:\Users\ichi-dohi\Documents\Visual Studio 2015\Projects\FileSizeChecker\FileSizeChecker\bin\Debug\FileSizeChecker.pdb
+C:\Users\ichi-dohi\Documents\Visual Studio 2015\Projects\FileSizeChecker\FileSizeChecker\obj\Debug\FileSizeChecker.Properties.Resources.resources
+C:\Users\ichi-dohi\Documents\Visual Studio 2015\Projects\FileSizeChecker\FileSizeChecker\obj\Debug\FileSizeChecker.csproj.GenerateResource.Cache
+C:\Users\ichi-dohi\Documents\Visual Studio 2015\Projects\FileSizeChecker\FileSizeChecker\obj\Debug\FileSizeChecker.exe
+C:\Users\ichi-dohi\Documents\Visual Studio 2015\Projects\FileSizeChecker\FileSizeChecker\obj\Debug\FileSizeChecker.pdb
+C:\Users\ichi-dohi\Documents\Visual Studio 2015\Projects\FileSizeChecker\FileSizeChecker\bin\Debug\Microsoft.WindowsAPICodePack.dll
+C:\Users\ichi-dohi\Documents\Visual Studio 2015\Projects\FileSizeChecker\FileSizeChecker\bin\Debug\Microsoft.WindowsAPICodePack.Shell.dll
+C:\Users\ichi-dohi\Documents\Visual Studio 2015\Projects\FileSizeChecker\FileSizeChecker\obj\Debug\FileSizeChecker.csprojResolveAssemblyReference.cache
+C:\Users\ichi-dohi\Documents\Visual Studio 2015\Projects\FileSizeChecker\FileSizeChecker\obj\Debug\FileSizeChecker.MainForm.resources
