@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
+using FileSizeChecker.Extensions;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace FileSizeChecker
@@ -42,7 +43,7 @@ namespace FileSizeChecker
 
             filePathTextBox.Text = filePath;
 
-            dataGridView1.Rows.Clear();
+            dataGridView.Rows.Clear();
             EnableForm(false);
             totalSizeLabel.Text = "計算中...";
             
@@ -62,14 +63,14 @@ namespace FileSizeChecker
                 if(data == null) throw new Exception();
                 foreach ( var entry in data )
                 {
-                    dataGridView1.Rows.Add(
+                    dataGridView.Rows.Add(
                         "削除", 
                         Path.GetFileName( entry.FullPath ),
-                        SizeSuffix( entry.FileSize ),
+                        entry.FileSize.ToSizeSuffix( 2 ),
                         entry.FileSize, entry.FullPath );
                 }
-                dataGridView1.Sort( dataGridView1.Columns[3], ListSortDirection.Descending );
-                totalSizeLabel.Text = "合計: " + SizeSuffix( totalSize, 2 ) + " (取得できなかったファイル数: " + failedChecks + ")";
+                dataGridView.Sort( dataGridView.Columns[3], ListSortDirection.Descending );
+                totalSizeLabel.Text = "合計: " + totalSize.ToSizeSuffix( 2 ) + " (取得できなかったファイル数: " + failedChecks + ")";
 
                 history.Add( filePath );
                 currentIndex++;
@@ -85,7 +86,7 @@ namespace FileSizeChecker
         private void EnableForm(bool value)
         {
             refreshButton.Enabled = value;
-            dataGridView1.Enabled = value;
+            dataGridView.Enabled = value;
             searchButton.Enabled = value;
             openFolderButton.Enabled = value;
 
@@ -97,34 +98,6 @@ namespace FileSizeChecker
             {
                 backButton.Enabled = false;
             }
-        }
-        
-
-        static readonly string[] SizeSuffixes =
-            { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
-        static string SizeSuffix ( Int64 value, int decimalPlaces = 1 )
-        {
-            if ( value < 0 ) { return "-" + SizeSuffix( -value ); }
-            if ( value == 0 ) { return "0.0 bytes"; }
-
-            // mag is 0 for bytes, 1 for KB, 2, for MB, etc.
-            int mag = (int)Math.Log(value, 1024);
-
-            // 1L << (mag * 10) == 2 ^ (10 * mag) 
-            // [i.e. the number of bytes in the unit corresponding to mag]
-            decimal adjustedSize = (decimal)value / (1L << (mag * 10));
-
-            // make adjustment when the value is large enough that
-            // it would round up to 1000 or more
-            if ( Math.Round( adjustedSize, decimalPlaces ) >= 1000 )
-            {
-                mag += 1;
-                adjustedSize /= 1024;
-            }
-
-            return string.Format( "{0:n" + decimalPlaces + "} {1}",
-                adjustedSize,
-                SizeSuffixes[mag] );
         }
 
         #region DataGridView
@@ -138,7 +111,7 @@ namespace FileSizeChecker
                          MessageBoxButtons.YesNo, MessageBoxIcon.Question ) != DialogResult.Yes ) return;
 
                 // 削除 
-                var fullFilePath = dataGridView1.Rows[e.RowIndex].Cells["FullPath"].Value.ToString();
+                var fullFilePath = dataGridView.Rows[e.RowIndex].Cells["FullPath"].Value.ToString();
                 try
                 {
                     File.Delete( fullFilePath );
@@ -156,22 +129,23 @@ namespace FileSizeChecker
 
         }
 
-        private void dataGridView1_CellContentDoubleClick ( object sender, DataGridViewCellEventArgs e )
+        private void DataGridView_CellContentDoubleClick ( object sender, DataGridViewCellEventArgs e )
         {
-            if ( e.ColumnIndex == 0 ) return;
+            if ( e.ColumnIndex == 0 || e.RowIndex < 0 ) return;
 
-            var fullFilePath = dataGridView1.Rows[e.RowIndex].Cells["FullPath"].Value.ToString();
+            string fullFilePath = dataGridView.Rows[e.RowIndex].Cells["FullPath"].Value.ToString();
             if ( !Directory.Exists( fullFilePath ) ) return;
             DisplayData( fullFilePath );
         }
-        private void dataGridView1_CellMouseClick ( object sender, DataGridViewCellMouseEventArgs e )
+
+        private void DataGridView_CellMouseClick ( object sender, DataGridViewCellMouseEventArgs e )
         {
-            if ( e.Button == MouseButtons.Right )
+            if ( e.Button == MouseButtons.Right && e.RowIndex >= 0 )
             {
-                dataGridView1.ClearSelection();
+                dataGridView.ClearSelection();
                 OpenExplorerStripMenuItem.Enabled =
-                    Directory.Exists( dataGridView1.Rows[e.RowIndex].Cells[4].Value as string );
-                dataGridView1.CurrentCell = dataGridView1[e.ColumnIndex, e.RowIndex];
+                    Directory.Exists( dataGridView.Rows[e.RowIndex].Cells[4].Value as string );
+                dataGridView.CurrentCell = dataGridView[e.ColumnIndex, e.RowIndex];
 
                 contextMenuStrip.Show( Cursor.Position );
             }
@@ -180,7 +154,7 @@ namespace FileSizeChecker
         #endregion
 
 
-        private void openFolderButton_Click ( object sender, EventArgs e )
+        private void OpenFolderButton_Click ( object sender, EventArgs e )
         {
             var openFolderDialog = new CommonOpenFileDialog()
             {
@@ -190,12 +164,12 @@ namespace FileSizeChecker
             DisplayData( openFolderDialog.FileName );
         }
 
-        private void refreshButton_Click ( object sender, EventArgs e )
+        private void RefreshButton_Click ( object sender, EventArgs e )
         {
             DisplayData( history[currentIndex] );
         }
 
-        private void backButton_Click ( object sender, EventArgs e )
+        private void BackButton_Click ( object sender, EventArgs e )
         {
             history.RemoveAt( history.Count - 1 );
             DisplayData( history[--currentIndex] );
@@ -203,7 +177,7 @@ namespace FileSizeChecker
 
         private void OpenExplorerStripMenuItem_Click ( object sender, EventArgs e )
         {
-            var filePath = dataGridView1.CurrentRow.Cells["FullPath"].Value as string;
+            var filePath = dataGridView.CurrentRow.Cells["FullPath"].Value as string;
             Process.Start( filePath );
         }
 
