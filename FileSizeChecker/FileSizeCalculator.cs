@@ -17,7 +17,7 @@ namespace FileSizeChecker
     class FileSizeCalculator
     {
 
-        private static long _failedChecks;
+        private static long failedChecks;
 
         internal IEnumerable<FileSizeInfo> Calculate( string directoryPath, out long totalSize, out long failedChecks )
         {
@@ -27,7 +27,7 @@ namespace FileSizeChecker
             }
 
             var directoryInfo = new DirectoryInfo( directoryPath );
-            _failedChecks = 0;
+            FileSizeCalculator.failedChecks = 0;
 
             var result = new ConcurrentBag<FileSizeInfo>();
             long _totalSize = 0;
@@ -43,7 +43,7 @@ namespace FileSizeChecker
                 Interlocked.Add( ref _totalSize, fileInfo.Length );
             } );
 
-            failedChecks = _failedChecks;
+            failedChecks = FileSizeCalculator.failedChecks;
             totalSize = _totalSize;
 
             return result;
@@ -60,7 +60,7 @@ namespace FileSizeChecker
             }
             catch ( Exception )
             {
-                Interlocked.Increment( ref _failedChecks );
+                Interlocked.Increment( ref failedChecks );
             }
 
             //結果を返す
