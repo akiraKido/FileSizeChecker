@@ -20,6 +20,13 @@ namespace FileSizeChecker
     {
         internal string FullPath { get; set; }
         internal long FileSize { get; set; }
+        internal FileType FileType { get; set; }
+    }
+
+    enum FileType
+    {
+        Directory,
+        File
     }
 
     class FileSizeCalculator
@@ -48,12 +55,22 @@ namespace FileSizeChecker
             Parallel.ForEach( directoryInfo.GetDirectories(), directory =>
             {
                 long directorySize = GetDirectorySize( directory, useCache );
-                result.Add( new FileSizeInfo {FileSize = directorySize , FullPath = directory.FullName} );
+                result.Add( new FileSizeInfo
+                {
+                    FileSize = directorySize,
+                    FullPath = directory.FullName,
+                    FileType = FileType.Directory
+                } );
                 Interlocked.Add( ref _totalSize, directorySize );
             } );
             Parallel.ForEach( directoryInfo.GetFiles(), fileInfo =>
             {
-                result.Add( new FileSizeInfo {FileSize = fileInfo.Length, FullPath = fileInfo.FullName} );
+                result.Add( new FileSizeInfo
+                {
+                    FileSize = fileInfo.Length,
+                    FullPath = fileInfo.FullName,
+                    FileType = FileType.File
+                } );
                 Interlocked.Add( ref _totalSize, fileInfo.Length );
             } );
 

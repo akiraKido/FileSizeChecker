@@ -30,11 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.DeleteButton = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FileSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ActualSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FullPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.filePathTextBox = new System.Windows.Forms.TextBox();
             this.openFolderButton = new System.Windows.Forms.Button();
             this.searchButton = new System.Windows.Forms.Button();
@@ -46,6 +41,12 @@
             this.OpenExplorerStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ExtractOldFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ExtractOldFilesButton = new System.Windows.Forms.Button();
+            this.DeleteButton = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.FileType = new System.Windows.Forms.DataGridViewImageColumn();
+            this.FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FileSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ActualSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FullPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
@@ -59,6 +60,7 @@
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.DeleteButton,
+            this.FileType,
             this.FileName,
             this.FileSize,
             this.ActualSize,
@@ -72,33 +74,6 @@
             this.dataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellContentDoubleClick);
             this.dataGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView_CellMouseClick);
-            // 
-            // DeleteButton
-            // 
-            this.DeleteButton.HeaderText = "削除";
-            this.DeleteButton.Name = "DeleteButton";
-            this.DeleteButton.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.DeleteButton.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // FileName
-            // 
-            this.FileName.HeaderText = "FileName";
-            this.FileName.Name = "FileName";
-            // 
-            // FileSize
-            // 
-            this.FileSize.HeaderText = "FileSize";
-            this.FileSize.Name = "FileSize";
-            // 
-            // ActualSize
-            // 
-            this.ActualSize.HeaderText = "ActualSize";
-            this.ActualSize.Name = "ActualSize";
-            // 
-            // FullPath
-            // 
-            this.FullPath.HeaderText = "FullPath";
-            this.FullPath.Name = "FullPath";
             // 
             // filePathTextBox
             // 
@@ -200,6 +175,42 @@
             this.ExtractOldFilesButton.UseVisualStyleBackColor = true;
             this.ExtractOldFilesButton.Click += new System.EventHandler(this.ExtractOldFilesButton_Click);
             // 
+            // DeleteButton
+            // 
+            this.DeleteButton.HeaderText = "削除";
+            this.DeleteButton.Name = "DeleteButton";
+            this.DeleteButton.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.DeleteButton.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // FileType
+            // 
+            this.FileType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.FileType.HeaderText = "FileType";
+            this.FileType.Name = "FileType";
+            this.FileType.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.FileType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.FileType.Width = 74;
+            // 
+            // FileName
+            // 
+            this.FileName.HeaderText = "FileName";
+            this.FileName.Name = "FileName";
+            // 
+            // FileSize
+            // 
+            this.FileSize.HeaderText = "FileSize";
+            this.FileSize.Name = "FileSize";
+            // 
+            // ActualSize
+            // 
+            this.ActualSize.HeaderText = "ActualSize";
+            this.ActualSize.Name = "ActualSize";
+            // 
+            // FullPath
+            // 
+            this.FullPath.HeaderText = "FullPath";
+            this.FullPath.Name = "FullPath";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -232,17 +243,18 @@
         private System.Windows.Forms.Button searchButton;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel totalSizeLabel;
-        private System.Windows.Forms.DataGridViewButtonColumn DeleteButton;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FileName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FileSize;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ActualSize;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FullPath;
         private System.Windows.Forms.Button refreshButton;
         private System.Windows.Forms.Button backButton;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem OpenExplorerStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ExtractOldFilesToolStripMenuItem;
         private System.Windows.Forms.Button ExtractOldFilesButton;
+        private System.Windows.Forms.DataGridViewButtonColumn DeleteButton;
+        private System.Windows.Forms.DataGridViewImageColumn FileType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FileName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FileSize;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ActualSize;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FullPath;
     }
 }
 

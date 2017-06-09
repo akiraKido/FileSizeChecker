@@ -59,5 +59,25 @@ namespace FileSizeChecker.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap _1497023987_1_01 {
+            get {
+                object obj = ResourceManager.GetObject("_1497023987_1_01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap _1497023994_10_Folder {
+            get {
+                object obj = ResourceManager.GetObject("_1497023994_10_Folder", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
