@@ -44,6 +44,8 @@
             this.backButton = new System.Windows.Forms.Button();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.OpenExplorerStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExtractOldFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExtractOldFilesButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
@@ -65,7 +67,7 @@
             this.dataGridView.Location = new System.Drawing.Point(12, 66);
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowTemplate.Height = 21;
-            this.dataGridView.Size = new System.Drawing.Size(625, 560);
+            this.dataGridView.Size = new System.Drawing.Size(625, 531);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellContentDoubleClick);
@@ -169,22 +171,41 @@
             // contextMenuStrip
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.OpenExplorerStripMenuItem});
+            this.OpenExplorerStripMenuItem,
+            this.ExtractOldFilesToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(155, 26);
+            this.contextMenuStrip.Size = new System.Drawing.Size(183, 48);
             // 
             // OpenExplorerStripMenuItem
             // 
             this.OpenExplorerStripMenuItem.Name = "OpenExplorerStripMenuItem";
-            this.OpenExplorerStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.OpenExplorerStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.OpenExplorerStripMenuItem.Text = "Explorer で開く";
             this.OpenExplorerStripMenuItem.Click += new System.EventHandler(this.OpenExplorerStripMenuItem_Click);
+            // 
+            // ExtractOldFilesToolStripMenuItem
+            // 
+            this.ExtractOldFilesToolStripMenuItem.Name = "ExtractOldFilesToolStripMenuItem";
+            this.ExtractOldFilesToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.ExtractOldFilesToolStripMenuItem.Text = "古いファイルを抽出する";
+            this.ExtractOldFilesToolStripMenuItem.Click += new System.EventHandler(this.ExtractOldFilesToolStripMenuItem_Click);
+            // 
+            // ExtractOldFilesButton
+            // 
+            this.ExtractOldFilesButton.Location = new System.Drawing.Point(510, 603);
+            this.ExtractOldFilesButton.Name = "ExtractOldFilesButton";
+            this.ExtractOldFilesButton.Size = new System.Drawing.Size(127, 23);
+            this.ExtractOldFilesButton.TabIndex = 7;
+            this.ExtractOldFilesButton.Text = "古いファイルを抽出する";
+            this.ExtractOldFilesButton.UseVisualStyleBackColor = true;
+            this.ExtractOldFilesButton.Click += new System.EventHandler(this.ExtractOldFilesButton_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(649, 651);
+            this.Controls.Add(this.ExtractOldFilesButton);
             this.Controls.Add(this.backButton);
             this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.statusStrip1);
@@ -220,6 +241,8 @@
         private System.Windows.Forms.Button backButton;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem OpenExplorerStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ExtractOldFilesToolStripMenuItem;
+        private System.Windows.Forms.Button ExtractOldFilesButton;
     }
 }
 

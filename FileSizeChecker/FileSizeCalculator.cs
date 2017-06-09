@@ -47,7 +47,7 @@ namespace FileSizeChecker
             long _totalSize = 0;
             Parallel.ForEach( directoryInfo.GetDirectories(), directory =>
             {
-                long directorySize = GetDirectorySize( directory );
+                long directorySize = GetDirectorySize( directory, useCache );
                 result.Add( new FileSizeInfo {FileSize = directorySize , FullPath = directory.FullName} );
                 Interlocked.Add( ref _totalSize, directorySize );
             } );
@@ -69,14 +69,28 @@ namespace FileSizeChecker
             return directorySizeInfo;
         }
 
-        private static long GetDirectorySize ( DirectoryInfo dirInfo )
+        private static long GetDirectorySize ( DirectoryInfo dirInfo, bool useCache )
         {
             long size = 0;
 
             try
             {
                 size += dirInfo.GetFiles().Sum( fi => fi.Length );
-                size += dirInfo.GetDirectories().Sum( di => GetDirectorySize( di ) );
+
+                foreach ( var directoryInfo in dirInfo.GetDirectories() )
+                {
+                    long dirSize = 0;
+                    if ( useCache && DirectorySizeCache.ContainsKey( directoryInfo.FullName ) )
+                    {
+                        dirSize = DirectorySizeCache[directoryInfo.FullName];
+                    }
+                    else
+                    {
+                        dirSize = GetDirectorySize( directoryInfo, useCache );
+                        DirectorySizeCache.AddOrUpdate( directoryInfo.FullName, dirSize );
+                    }
+                    size += dirSize;
+                }
             }
             catch ( Exception )
             {
@@ -86,6 +100,7 @@ namespace FileSizeChecker
             //結果を返す
             return size;
         }
+        private static readonly Dictionary<string, long> DirectorySizeCache = new Dictionary<string, long>();
     }
 
     class FileSizeCalculationException : Exception

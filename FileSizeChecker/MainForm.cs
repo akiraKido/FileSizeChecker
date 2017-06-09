@@ -88,7 +88,9 @@ namespace FileSizeChecker
                         "削除", 
                         Path.GetFileName( entry.FullPath ),
                         entry.FileSize.ToSizeSuffix( 2 ),
-                        entry.FileSize, entry.FullPath );
+                        entry.FileSize,
+                        entry.FullPath );
+                    totalSize += entry.FileSize;
                 }
                 dataGridView.Sort( dataGridView.Columns[3], ListSortDirection.Descending );
                 totalSizeLabel.Text = "合計: " + totalSize.ToSizeSuffix( 2 ) + " (取得できなかったファイル数: " + failedChecks + ")";
@@ -197,5 +199,14 @@ namespace FileSizeChecker
             Process.Start( filePath );
         }
 
+        private void ExtractOldFilesToolStripMenuItem_Click ( object sender, EventArgs e )
+        {
+            new OldFilesForm( dataGridView.CurrentRow.Cells["FullPath"].Value as string ).Show();
+        }
+
+        private void ExtractOldFilesButton_Click ( object sender, EventArgs e )
+        {
+            new OldFilesForm( CurrentDirectory ).Show();
+        }
     }
 }
