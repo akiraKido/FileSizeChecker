@@ -113,6 +113,12 @@
   <ItemGroup>
     <None Include="Resources\RefreshImage.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1497023987_1-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1497023994_10.Folder.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /Y "$(TargetPath)" "$(SolutionDir)/Bin"</PostBuildEvent>

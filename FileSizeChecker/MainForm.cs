@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
 using FileSizeChecker.Extensions;
+using FileSizeChecker.Properties;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace FileSizeChecker
@@ -12,8 +15,36 @@ namespace FileSizeChecker
     public partial class MainForm : Form
     {
         private readonly HistoryManager history = new HistoryManager();
-
         private string _currentDirectory;
+        private static readonly Lazy<Bitmap> fileIcon = new Lazy<Bitmap>( () =>
+        {
+            using ( var image = new Bitmap( Resources._1497023987_1_01 ) )
+            {
+                return ResizeIcon( image, 28, 28 );
+            }
+        });
+
+        private static readonly Lazy<Bitmap> directoryIcon = new Lazy<Bitmap>( () =>
+        {
+            using ( var image = new Bitmap( Resources._1497023994_10_Folder ) )
+            {
+                return ResizeIcon( image, 20, 20 );
+            }
+        });
+
+        private static Bitmap ResizeIcon( Bitmap image, int width, int height )
+        {
+            var newImage = new Bitmap( width, height );
+
+            using ( var graphics = Graphics.FromImage( newImage ) )
+            {
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.DrawImage( image, 0, 0, width, height );
+            }
+
+            return newImage;
+        }
+
         private string CurrentDirectory
         {
             get { return _currentDirectory; }
@@ -85,14 +116,17 @@ namespace FileSizeChecker
                 foreach ( var entry in data.FileSizeInfos )
                 {
                     dataGridView.Rows.Add(
-                        "削除", 
+                        "削除",
+                        entry.FileType == FileSizeChecker.FileType.Directory
+                            ? directoryIcon.Value
+                            : fileIcon.Value, 
                         Path.GetFileName( entry.FullPath ),
                         entry.FileSize.ToSizeSuffix( 2 ),
                         entry.FileSize,
                         entry.FullPath );
                     totalSize += entry.FileSize;
                 }
-                dataGridView.Sort( dataGridView.Columns[3], ListSortDirection.Descending );
+                dataGridView.Sort( dataGridView.Columns[4], ListSortDirection.Descending );
                 totalSizeLabel.Text = "合計: " + totalSize.ToSizeSuffix( 2 ) + " (取得できなかったファイル数: " + failedChecks + ")";
 
                 EnableForm( true );
@@ -162,8 +196,6 @@ namespace FileSizeChecker
             if ( e.Button == MouseButtons.Right && e.RowIndex >= 0 )
             {
                 dataGridView.ClearSelection();
-                OpenExplorerStripMenuItem.Enabled =
-                    Directory.Exists( dataGridView.Rows[e.RowIndex].Cells[4].Value as string );
                 dataGridView.CurrentCell = dataGridView[e.ColumnIndex, e.RowIndex];
 
                 contextMenuStrip.Show( Cursor.Position );
@@ -196,6 +228,10 @@ namespace FileSizeChecker
         private void OpenExplorerStripMenuItem_Click ( object sender, EventArgs e )
         {
             var filePath = dataGridView.CurrentRow.Cells["FullPath"].Value as string;
+            if ( !Directory.Exists( filePath ) )
+            {
+                filePath = Path.GetDirectoryName( filePath );
+            }
             Process.Start( filePath );
         }
 
