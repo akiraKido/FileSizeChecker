@@ -54,7 +54,7 @@ namespace FileSizeChecker
                         entry.LastAccessTime,
                         entry.FullName);
                 }
-                dataGridView.Sort( dataGridView.Columns[3], ListSortDirection.Descending );
+                dataGridView.Sort( dataGridView.Columns[2], ListSortDirection.Ascending );
             };
 
             worker.RunWorkerAsync();
