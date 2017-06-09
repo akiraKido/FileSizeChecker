@@ -11,8 +11,18 @@ namespace FileSizeChecker
 {
     public partial class MainForm : Form
     {
-        private readonly List<string> history = new List<string>();
-        private int currentIndex = -1;
+        private readonly HistoryManager history = new HistoryManager();
+
+        private string _currentDirectory;
+        private string CurrentDirectory
+        {
+            get { return _currentDirectory; }
+            set
+            {
+                filePathTextBox.Text = value;
+                _currentDirectory = value;
+            }
+        }
 
         public MainForm ()
         {
@@ -33,15 +43,17 @@ namespace FileSizeChecker
             DisplayData(filePathTextBox.Text);
         }
         
-        private void DisplayData(string filePath)
+        private void DisplayData(string filePath, HistoryManagerOptions options = null)
         {
             if ( !Directory.Exists( filePath ) )
             {
                 MessageBox.Show( "Directory not found." );
                 return;
             }
+            if(options == null) options = new HistoryManagerOptions();
 
-            filePathTextBox.Text = filePath;
+            CurrentDirectory = filePath;
+            if(options.PushHistory) history.Push( CurrentDirectory );
 
             dataGridView.Rows.Clear();
             EnableForm(false);
@@ -49,19 +61,28 @@ namespace FileSizeChecker
             
 
             var worker = new BackgroundWorker();
-            IEnumerable<FileSizeInfo> data = null;
+            DirectorySizeInfo data = null;
             long totalSize = 0;
             long failedChecks = 0;
             worker.DoWork += ( sender, e ) =>
             {
-                var fileSizeCalculator = new FileSizeCalculator();
-                data = fileSizeCalculator.Calculate( filePath, out totalSize, out failedChecks );
+                try
+                {
+
+                    var fileSizeCalculator = new FileSizeCalculator();
+                    data = fileSizeCalculator.Calculate( filePath, options.UseCache );
+                }
+                catch ( Exception exception )
+                {
+                    Debug.WriteLine( exception );
+                    throw;
+                }
             };
 
             worker.RunWorkerCompleted += (sender, e) =>
             {
                 if(data == null) throw new Exception();
-                foreach ( var entry in data )
+                foreach ( var entry in data.FileSizeInfos )
                 {
                     dataGridView.Rows.Add(
                         "削除", 
@@ -71,10 +92,6 @@ namespace FileSizeChecker
                 }
                 dataGridView.Sort( dataGridView.Columns[3], ListSortDirection.Descending );
                 totalSizeLabel.Text = "合計: " + totalSize.ToSizeSuffix( 2 ) + " (取得できなかったファイル数: " + failedChecks + ")";
-
-                history.Add( filePath );
-                currentIndex++;
-
 
                 EnableForm( true );
             };
@@ -92,7 +109,7 @@ namespace FileSizeChecker
 
             if ( value == true )
             {
-                if ( currentIndex > 0 ) backButton.Enabled = true;
+                if ( history.CanReturn ) backButton.Enabled = true;
             }
             else
             {
@@ -166,13 +183,12 @@ namespace FileSizeChecker
 
         private void RefreshButton_Click ( object sender, EventArgs e )
         {
-            DisplayData( history[currentIndex] );
+            DisplayData( CurrentDirectory, new HistoryManagerOptions {UseCache = false, PushHistory = false} );
         }
 
         private void BackButton_Click ( object sender, EventArgs e )
         {
-            history.RemoveAt( history.Count - 1 );
-            DisplayData( history[--currentIndex] );
+            DisplayData( history.Back(), new HistoryManagerOptions {PushHistory = false} );
         }
 
         private void OpenExplorerStripMenuItem_Click ( object sender, EventArgs e )

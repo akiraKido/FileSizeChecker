@@ -49,7 +49,7 @@
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // dataGridView
             // 
             this.dataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -62,10 +62,10 @@
             this.ActualSize,
             this.FullPath});
             this.dataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dataGridView.Location = new System.Drawing.Point(12, 67);
+            this.dataGridView.Location = new System.Drawing.Point(12, 66);
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowTemplate.Height = 21;
-            this.dataGridView.Size = new System.Drawing.Size(625, 559);
+            this.dataGridView.Size = new System.Drawing.Size(625, 560);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellContentDoubleClick);
@@ -102,17 +102,17 @@
             // 
             this.filePathTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.filePathTextBox.Location = new System.Drawing.Point(13, 15);
+            this.filePathTextBox.Location = new System.Drawing.Point(12, 12);
             this.filePathTextBox.Name = "filePathTextBox";
-            this.filePathTextBox.Size = new System.Drawing.Size(595, 19);
+            this.filePathTextBox.Size = new System.Drawing.Size(600, 19);
             this.filePathTextBox.TabIndex = 1;
             // 
             // openFolderButton
             // 
             this.openFolderButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.openFolderButton.Location = new System.Drawing.Point(614, 13);
+            this.openFolderButton.Location = new System.Drawing.Point(618, 12);
             this.openFolderButton.Name = "openFolderButton";
-            this.openFolderButton.Size = new System.Drawing.Size(22, 23);
+            this.openFolderButton.Size = new System.Drawing.Size(19, 19);
             this.openFolderButton.TabIndex = 2;
             this.openFolderButton.Text = "...";
             this.openFolderButton.UseVisualStyleBackColor = true;
@@ -123,7 +123,7 @@
             this.searchButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.searchButton.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.searchButton.Location = new System.Drawing.Point(497, 38);
+            this.searchButton.Location = new System.Drawing.Point(497, 37);
             this.searchButton.Name = "searchButton";
             this.searchButton.Size = new System.Drawing.Size(140, 23);
             this.searchButton.TabIndex = 3;
@@ -148,7 +148,7 @@
             // 
             // refreshButton
             // 
-            this.refreshButton.Location = new System.Drawing.Point(420, 38);
+            this.refreshButton.Location = new System.Drawing.Point(420, 37);
             this.refreshButton.Name = "refreshButton";
             this.refreshButton.Size = new System.Drawing.Size(71, 23);
             this.refreshButton.TabIndex = 5;
@@ -158,7 +158,7 @@
             // 
             // backButton
             // 
-            this.backButton.Location = new System.Drawing.Point(13, 38);
+            this.backButton.Location = new System.Drawing.Point(12, 37);
             this.backButton.Name = "backButton";
             this.backButton.Size = new System.Drawing.Size(75, 23);
             this.backButton.TabIndex = 6;

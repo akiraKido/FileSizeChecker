@@ -5,9 +5,17 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FileSizeChecker.Extensions;
 
 namespace FileSizeChecker
 {
+    class DirectorySizeInfo
+    {
+        internal long TotalSize;
+        internal long FailedChecks;
+        internal IEnumerable<FileSizeInfo> FileSizeInfos;
+    }
+
     class FileSizeInfo
     {
         internal string FullPath { get; set; }
@@ -18,16 +26,22 @@ namespace FileSizeChecker
     {
 
         private static long failedChecks;
+        private static readonly Dictionary<string, DirectorySizeInfo> Cache = new Dictionary<string, DirectorySizeInfo>();
 
-        internal IEnumerable<FileSizeInfo> Calculate( string directoryPath, out long totalSize, out long failedChecks )
+        internal DirectorySizeInfo Calculate( string directoryPath, bool useCache = true )
         {
+            if ( useCache && Cache.ContainsKey( directoryPath ) )
+            {
+                return Cache[directoryPath];
+            }
+
             if ( !Directory.Exists( directoryPath ) )
             {
-                throw new FileSizeCalculationException("Directory not found:" + directoryPath);
+                throw new FileSizeCalculationException( "Directory not found:" + directoryPath );
             }
 
             var directoryInfo = new DirectoryInfo( directoryPath );
-            FileSizeCalculator.failedChecks = 0;
+            failedChecks = 0;
 
             var result = new ConcurrentBag<FileSizeInfo>();
             long _totalSize = 0;
@@ -43,10 +57,16 @@ namespace FileSizeChecker
                 Interlocked.Add( ref _totalSize, fileInfo.Length );
             } );
 
-            failedChecks = FileSizeCalculator.failedChecks;
-            totalSize = _totalSize;
+            var directorySizeInfo = new DirectorySizeInfo
+            {
+                TotalSize = _totalSize,
+                FailedChecks = failedChecks,
+                FileSizeInfos = result
+            };
 
-            return result;
+            Cache.AddOrUpdate( directoryPath, directorySizeInfo );
+
+            return directorySizeInfo;
         }
 
         private static long GetDirectorySize ( DirectoryInfo dirInfo )
