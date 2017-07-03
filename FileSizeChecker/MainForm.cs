@@ -6,8 +6,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
-using FileSizeChecker.Extensions;
 using FileSizeChecker.Properties;
+using FileSizeChecker.Extensions;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace FileSizeChecker
