@@ -9,42 +9,38 @@ using FileSizeCheckerLibrary.Extensions;
 
 namespace FileSizeCheckerLibrary
 {
-    class DirectorySizeInfo
+    public class DirectorySizeInfo
     {
-        internal long TotalSize;
-        internal long FailedChecks;
-        internal IEnumerable<FileSizeInfo> FileSizeInfos;
+        public long TotalSize { get; set; }
+        public long FailedChecks { get; set; }
+        public IEnumerable<FileSizeInfo> FileSizeInfos { get; set; }
     }
 
-    class FileSizeInfo
+    public class FileSizeInfo
     {
-        internal string FullPath { get; set; }
-        internal long FileSize { get; set; }
-        internal FileType FileType { get; set; }
+        public string FullPath { get; set; }
+        public long FileSize { get; set; }
+        public FileType FileType { get; set; }
     }
 
-    enum FileType
+    public enum FileType
     {
         Directory,
         File
     }
 
-    class FileSizeCalculator
+    public class FileSizeCalculator
     {
-
-        private static long failedChecks;
-        private static readonly Dictionary<string, DirectorySizeInfo> Cache = new Dictionary<string, DirectorySizeInfo>();
-
-        internal async Task<DirectorySizeInfo> CalculateAsync( string directoryPath, bool useCache = true )
+        public async Task<DirectorySizeInfo> CalculateAsync( string directoryPath, bool useCache = true )
         {
             return await Task.Run( () => Calculate( directoryPath, useCache ) );
         }
 
-        internal DirectorySizeInfo Calculate ( string directoryPath, bool useCache = true )
+        public DirectorySizeInfo Calculate ( string directoryPath, bool useCache = true )
         {
-            if ( useCache && Cache.ContainsKey( directoryPath ) )
+            if ( useCache && DirectorySizeInfoCache.ContainsKey( directoryPath ) )
             {
-                return Cache[directoryPath];
+                return DirectorySizeInfoCache[directoryPath];
             }
 
             if ( !Directory.Exists( directoryPath ) )
@@ -53,13 +49,13 @@ namespace FileSizeCheckerLibrary
             }
 
             var directoryInfo = new DirectoryInfo( directoryPath );
-            failedChecks = 0;
+            var failedChecks = 0;
 
             var result = new ConcurrentBag<FileSizeInfo>();
             long _totalSize = 0;
             Parallel.ForEach( directoryInfo.GetDirectories(), directory =>
             {
-                long directorySize = GetDirectorySize( directory, useCache );
+                long directorySize = GetDirectorySize( directory, useCache, out failedChecks );
                 result.Add( new FileSizeInfo
                 {
                     FileSize = directorySize,
@@ -86,14 +82,16 @@ namespace FileSizeCheckerLibrary
                 FileSizeInfos = result
             };
 
-            Cache.AddOrUpdate( directoryPath, directorySizeInfo );
+            DirectorySizeInfoCache.AddOrUpdate( directoryPath, directorySizeInfo );
 
             return directorySizeInfo;
         }
+        private static readonly Dictionary<string, DirectorySizeInfo> DirectorySizeInfoCache = new Dictionary<string, DirectorySizeInfo>();
 
-        private static long GetDirectorySize ( DirectoryInfo dirInfo, bool useCache )
+        private static long GetDirectorySize ( DirectoryInfo dirInfo, bool useCache, out int failedChecks )
         {
             long size = 0;
+            failedChecks = 0;
 
             try
             {
@@ -102,14 +100,14 @@ namespace FileSizeCheckerLibrary
                 foreach ( var directoryInfo in dirInfo.GetDirectories() )
                 {
                     long dirSize = 0;
-                    if ( useCache && DirectorySizeCache.ContainsKey( directoryInfo.FullName ) )
+                    if ( useCache && RawDirectorySizeCache.ContainsKey( directoryInfo.FullName ) )
                     {
-                        dirSize = DirectorySizeCache[directoryInfo.FullName];
+                        dirSize = RawDirectorySizeCache[directoryInfo.FullName];
                     }
                     else
                     {
-                        dirSize = GetDirectorySize( directoryInfo, useCache );
-                        DirectorySizeCache.AddOrUpdate( directoryInfo.FullName, dirSize );
+                        dirSize = GetDirectorySize( directoryInfo, useCache, out failedChecks );
+                        RawDirectorySizeCache.AddOrUpdate( directoryInfo.FullName, dirSize );
                     }
                     size += dirSize;
                 }
@@ -122,10 +120,10 @@ namespace FileSizeCheckerLibrary
             //結果を返す
             return size;
         }
-        private static readonly Dictionary<string, long> DirectorySizeCache = new Dictionary<string, long>();
+        private static readonly Dictionary<string, long> RawDirectorySizeCache = new Dictionary<string, long>();
     }
 
-    class FileSizeCalculationException : Exception
+    public class FileSizeCalculationException : Exception
     {
         internal FileSizeCalculationException ( string s ) : base( s ) { }
     }
